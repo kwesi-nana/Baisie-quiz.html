@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baisie's Science Quiz</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #fbc2eb, #a6c1ee);
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .quiz-container {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            width: 90%;
+            max-width: 500px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #ff6f61;
+        }
+
+        .question {
+            font-size: 1.2em;
+            margin: 20px 0;
+        }
+
+        .options button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 10px;
+            background-color: #4dd0e1;
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .options button:hover {
+            background-color: #26c6da;
+        }
+
+        .score {
+            font-size: 1.5em;
+            color: #ff6f61;
+        }
+
+        .next-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #ffb74d;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            color: white;
+            transition: 0.3s;
+        }
+
+        .next-btn:hover {
+            background-color: #ffa726;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Baisie's Science Quiz</h1>
+        <div id="quiz">
+            <div class="question" id="question"></div>
+            <div class="options" id="options"></div>
+            <button class="next-btn" id="nextBtn" onclick="nextQuestion()" style="display:none;">Next</button>
+        </div>
+        <div id="result" class="score" style="display:none;"></div>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                question: "What planet is known as the Red Planet?",
+                options: ["Earth", "Mars", "Jupiter", "Venus"],
+                answer: "Mars"
+            },
+            {
+                question: "What is H2O commonly known as?",
+                options: ["Salt", "Water", "Oxygen", "Hydrogen"],
+                answer: "Water"
+            },
+            {
+                question: "Which gas do plants absorb from the atmosphere?",
+                options: ["Oxygen", "Carbon Dioxide", "Nitrogen", "Helium"],
+                answer: "Carbon Dioxide"
+            },
+            {
+                question: "What is the center of an atom called?",
+                options: ["Electron", "Proton", "Nucleus", "Neutron"],
+                answer: "Nucleus"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        const questionEl = document.getElementById('question');
+        const optionsEl = document.getElementById('options');
+        const nextBtn = document.getElementById('nextBtn');
+        const resultEl = document.getElementById('result');
+
+        function loadQuestion() {
+            const current = quizData[currentQuestion];
+            questionEl.innerText = current.question;
+            optionsEl.innerHTML = '';
+            nextBtn.style.display = 'none';
+
+            current.options.forEach(option => {
+                const button = document.createElement('button');
+                button.innerText = option;
+                button.onclick = () => selectOption(option);
+                optionsEl.appendChild(button);
+            });
+        }
+
+        function selectOption(selected) {
+            const current = quizData[currentQuestion];
+            if(selected === current.answer) {
+                score++;
+            }
+            Array.from(optionsEl.children).forEach(btn => btn.disabled = true);
+            nextBtn.style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if(currentQuestion < quizData.length) {
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            document.getElementById('quiz').style.display = 'none';
+            resultEl.style.display = 'block';
+            resultEl.innerText = `You scored ${score} out of ${quizData.length}! 🎉`;
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
